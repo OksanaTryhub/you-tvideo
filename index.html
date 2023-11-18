@@ -11,52 +11,37 @@
   <link rel="stylesheet" href="styles/main.css">
 </head>
 <body>
-  <header class="header">
-    <div class="container">
-      <a href="/" class="header__link" >
-        <svg class="header__logo" viewBox="0 0 240 32" role="img" aria-label="Logo of You-Tvideo service"> 
-          <use xlink:href="/images/sprite.svg#logo-orange"/>
-        </svg>
-      </a>
-      <a class="header__link--favorite" href="/favorite.html">
-        Избранное
-        <svg class="header__favorite" viewBox="0 0 20 20" role="img" aria-label="Favorite videos">
-          <use xlink:href="/images/sprite.svg#star-orange"/>
-        </svg>
-      </a>
-    </div>
-  </header>
-
   <main>
-    <section class="hero" style="background-color: blue;">
-      <div class="container hero__container">
-        <a href="/" class="hero__link">
-          <svg class="hero__logo" viewBox="0 0 360 48" role="img" aria-label="Logo of You-Tvideo service">
-            <use xlink:href="/images/sprite.svg#logo-white" />
-          </svg>
-        </a>
-        <a class="hero__link--favorite" href="/favorite.html">
-          Избранное
-          <svg class="hero__favorite" viewBox="0 0 20 20" role="img" aria-label="Favorite videos">
-            <use xlink:href="/images/sprite.svg#star-white" />
-          </svg>
-        </a>
-        <h1 class="hero__title">Смотри. Загружай. Создавай</h1>
-        <p class="hero__tagline">Удобный видеохостинг для тебя</p>
+    <section class="hero" >
+      <div class="container">
+        <div class="hero__container">
+          <a href="/" class="hero__link">
+            <svg class="hero__logo" viewBox="0 0 360 48" role="img" aria-label="Logo of You-Tvideo service">
+              <use xlink:href="/images/sprite.svg#logo-white" />
+            </svg>
+          </a>
+          <a class="hero__link--favorite" href="/favorite.html">
+            <span>Избранное</span>
+            <svg class="hero__favorite" viewBox="0 0 20 20" role="img" aria-label="Favorite videos">
+              <use xlink:href="/images/sprite.svg#star-white" />
+            </svg>
+          </a>
+          <h1 class="hero__title">Смотри. Загружай. Создавай</h1>
+          <p class="hero__tagline">Удобный видеохостинг для тебя</p>
+        </div>
       </div>
     </section>
 
     <section class="search">
       <div class="container">
         <form class="search__form" >
-          <label class="search__form--label">
             <input class="search__form--input" type="search" placeholder="Найти видео..." >
-            <button class="search__form--btn">поиск
-              <svg class="search__icon" width="25" viewBox="0 0 20 20" role="img" aria-label="Search">
+            <button class="search__form--btn">
+              <span>поиск</span>
+              <svg class="search__icon">
                 <use xlink:href="/images/sprite.svg#search" />
               </svg>
             </button>
-          </label>
         </form>
       </div>
     </section>
@@ -76,8 +61,9 @@
                   </div>
               </a>
               <button class="video-card__favorite" style="width: 25; height: 25;">
-                <svg class="hero__favorite" width="25" viewBox="0 0 20 20" role="img" aria-label="Favorite videos">
-                  <use xlink:href="/images/sprite.svg#star-black" />
+                <svg class="video-card__favorite-icon" width="25" viewBox="0 0 20 20" role="img" aria-label="Favorite videos">
+                  <use class="star-o" xlink:href="/images/sprite.svg#star-black" />
+                  <use class="star" xlink:href="/images/sprite.svg#star-orange" />
                 </svg>
               </button>
             </article>
@@ -92,9 +78,10 @@
                     <p class="video-card__duration">31 мин 25 сек</p>
                   </div>
               </a>
-               <button class="video-card__favorite" style="width: 25; height: 25;">
-                <svg class="hero__favorite" width="25" viewBox="0 0 20 20" role="img" aria-label="Favorite videos">
-                  <use xlink:href="/images/sprite.svg#star-black" />
+              <button class="video-card__favorite video-card__favorite--active" style="width: 25; height: 25;">
+                <svg class="video-card__favorite-icon" width="25" viewBox="0 0 20 20" role="img" aria-label="Favorite videos">
+                  <use class="star-o" xlink:href="/images/sprite.svg#star-black" />
+                  <use class="star" xlink:href="/images/sprite.svg#star-orange" />
                 </svg>
               </button>
             </article>
@@ -109,15 +96,17 @@
                     <p class="video-card__duration">31 мин 25 сек</p>
                   </div>
               </a>
-               <button class="video-card__favorite" style="width: 25; height: 25;">
-                <svg class="hero__favorite" width="25" viewBox="0 0 20 20" role="img" aria-label="Favorite videos">
-                  <use xlink:href="/images/sprite.svg#star-black" />
+              <button class="video-card__favorite" style="width: 25; height: 25;">
+                <svg class="video-card__favorite-icon" width="25" viewBox="0 0 20 20" role="img" aria-label="Favorite videos">
+                  <use class="star-o" xlink:href="/images/sprite.svg#star-black" />
+                  <use class="star" xlink:href="/images/sprite.svg#star-orange" />
                 </svg>
               </button>
             </article>
           </li>
         </ul>
       </div>
+
     </section>
   </main>
 
