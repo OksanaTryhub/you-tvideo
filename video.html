@@ -13,14 +13,14 @@
 <body>
   <header class="header">
     <div class="container header__container">
-      <a href="/" class="header__link">
-        <svg class="header__logo" viewBox="0 0 240 32" role="img" aria-label="Logo of You-Tvideo service">
+      <a href="/" class="header__logo--link">
+        <svg class="header__logo--icon" viewBox="0 0 240 32" role="img" aria-label="Logo of You-Tvideo service">
           <use xlink:href="/images/sprite.svg#logo-orange" />
         </svg>
       </a>
-      <a class="header__link--favorite" href="/favorite.html">
-        Избранное
-        <svg class="header__favorite">
+      <a class="header__favorite--link" href="/favorite.html">
+        <span class="header__favorite--tag">Избранное</span>
+        <svg class="header__favorite--icon" role="img" aria-label="Favorite videos">
           <use xlink:href="/images/sprite.svg#star-black" />
         </svg>
       </a>
@@ -51,6 +51,23 @@
             allowfullscreen></iframe>
         </div>
         <div class="video__content">
+          
+          <button class="video__favorite-btn video__favorite--active">
+            <div class="video__favorite">
+              <span>В избранном</span>
+              <svg class="video__favorite-icon" viewBox="0 0 20 20" role="img" aria-label="Favorite video">
+                <use xlink:href="/images/sprite.svg#star-orange" />
+              </svg>
+            </div>
+          
+            <div class="video__no-favorite">
+              <span>Добавить в избранное</span>
+              <svg class="video__no-favorite-icon" viewBox="0 0 20 20" role="img" aria-label="Add to favorites">
+                <use xlink:href="/images/sprite.svg#star-black" />
+              </svg>
+            </div>
+          </button>
+
           <div class="video__details">
             <h3 class="video__details--title">Философия Идущего к реке</h3>
             <p class="video__details--channel">Правое полушарие интроверта</p>
@@ -62,22 +79,6 @@
               Смотрите наш курс-саммари «Как понимать философию» фоном.
             </p>
           </div>
-          
-          <button class="video__favorite-btn video__favorite--active">
-            <div class="video__favorite">
-              <span>В избранном</span>
-              <svg class="video__favorite-icon" viewBox="0 0 20 20" role="img" aria-label="Favorite video">
-                <use xlink:href="/images/sprite.svg#star-orange" />
-              </svg>
-            </div>
-              
-            <div class="video__no-favorite">
-              <span>Добавить в избранное</span>
-              <svg class="video__no-favorite-icon" viewBox="0 0 20 20" role="img" aria-label="Add to favorites">
-                <use xlink:href="/images/sprite.svg#star-black" />
-              </svg>
-            </div> 
-          </button>
         </div>
       </div>
     </section>
