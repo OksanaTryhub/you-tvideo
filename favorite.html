@@ -9,6 +9,8 @@
 
   <link rel="stylesheet" href="styles/normalize.css">
   <link rel="stylesheet" href="styles/main.css">
+  <script src="scripts/index.js" type="module"></script>
+
 </head>
 <body>
   <header class="header">
@@ -23,6 +25,7 @@
 
   <main>
     <section class="search">
+      <h2 hidden> Search section</h2>
       <div class="container">
         <form class="search__form">
           <input class="search__form--input" type="search" placeholder="Найти видео...">
@@ -40,60 +43,6 @@
       <div class="container">
         <h2 class="video-gallery__title">Избранное</h2>
         <ul class="video-list">
-          <li class="video-list__item">
-            <article class="video-card">
-              <a href="" class="video-card__link">
-                <img class="video-card__cover" src="/images/maxresdefault.png" alt="Video cover" />
-                <div>
-                  <h3 class="video-card__title">Философия Идущего к реке</h3>
-                  <p class="video-card__channel">Правое полушарие интроверта</p>
-                  <p class="video-card__duration">31 мин 25 сек</p>
-                </div>
-              </a>
-              <button class="video-card__favorite" style="width: 25; height: 25;">
-                <svg class="hero__favorite" width="25" viewBox="0 0 20 20" role="img" aria-label="Favorite videos">
-                  <use xlink:href="/images/sprite.svg#star-black" />
-                  <use xlink:href="/images/sprite.svg#star-orange" />
-                </svg>
-              </button>
-            </article>
-          </li>
-          <li class="video-list__item">
-            <article class="video-card">
-              <a href="" class="video-card__link">
-                <img class="video-card__cover" src="/images/maxresdefault.png" alt="Video cover" />
-                <div>
-                  <h3 class="video-card__title">Философия Идущего к реке</h3>
-                  <p class="video-card__channel">Правое полушарие интроверта</p>
-                  <p class="video-card__duration">31 мин 25 сек</p>
-                </div>
-              </a>
-              <button class="video-card__favorite" style="width: 25; height: 25;">
-                <svg class="hero__favorite" width="25" viewBox="0 0 20 20" role="img" aria-label="Favorite videos">
-                  <use xlink:href="/images/sprite.svg#star-black" />
-                  <use xlink:href="/images/sprite.svg#star-orange" />
-                </svg>
-              </button>
-            </article>
-          </li>
-          <li class="video-list__item">
-            <article class="video-card">
-              <a href="" class="video-card__link">
-                <img class="video-card__cover" src="/images/maxresdefault.png" alt="Video cover" />
-                <div>
-                  <h3 class="video-card__title">Философия Идущего к реке</h3>
-                  <p class="video-card__channel">Правое полушарие интроверта</p>
-                  <p class="video-card__duration">31 мин 25 сек</p>
-                </div>
-              </a>
-              <button class="video-card__favorite" style="width: 25; height: 25;">
-                <svg class="hero__favorite" width="25" viewBox="0 0 20 20" role="img" aria-label="Favorite videos">
-                  <use xlink:href="/images/sprite.svg#star-black" />
-                  <use xlink:href="/images/sprite.svg#star-orange" />
-                </svg>
-              </button>
-            </article>
-          </li>
         </ul>
       </div>
     </section>

@@ -9,6 +9,8 @@
 
   <link rel="stylesheet" href="styles/normalize.css">
   <link rel="stylesheet" href="styles/main.css">
+  <script src="scripts/index.js" type="module"></script>
+
 </head>
 <body>
   <header class="header">
@@ -29,6 +31,7 @@
 
   <main>
     <section class="search">
+      <h2 hidden> Search section</h2>
       <div class="container">
         <form class="search__form">
           <input class="search__form--input" type="search" placeholder="Найти видео...">
@@ -43,44 +46,7 @@
     </section>
 
     <section class="video">
-      <div class="container">
-        <div class="video__player">
-          <iframe class="video__iframe" width="560" height="315" src="https://www.youtube.com/embed/_W3R2VwRyF4?si=xwTZ-U74_DRDlT3x"
-            title="YouTube video player" frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowfullscreen></iframe>
-        </div>
-        <div class="video__content">
-          
-          <button class="video__favorite-btn video__favorite--active">
-            <div class="video__favorite">
-              <span>В избранном</span>
-              <svg class="video__favorite-icon" viewBox="0 0 20 20" role="img" aria-label="Favorite video">
-                <use xlink:href="/images/sprite.svg#star-orange" />
-              </svg>
-            </div>
-          
-            <div class="video__no-favorite">
-              <span>Добавить в избранное</span>
-              <svg class="video__no-favorite-icon" viewBox="0 0 20 20" role="img" aria-label="Add to favorites">
-                <use xlink:href="/images/sprite.svg#star-black" />
-              </svg>
-            </div>
-          </button>
-
-          <div class="video__details">
-            <h3 class="video__details--title">Философия Идущего к реке</h3>
-            <p class="video__details--channel">Правое полушарие интроверта</p>
-            <p class="video__details--info">
-              <span class="video__details--views">1 575 581 просмотр</span>
-              <span class="video__details--date">Дата премьеры: 16 авг. 2024 г.</span>
-            </p>
-            <p class="video__details--description">
-              Смотрите наш курс-саммари «Как понимать философию» фоном.
-            </p>
-          </div>
-        </div>
-      </div>
+      <h2 hidden> Video player</h2>
     </section>
 
     <section class="video-gallery">
@@ -97,7 +63,7 @@
                   <p class="video-card__duration">31 мин 25 сек</p>
                 </div>
               </a>
-              <button class="video-card__favorite" style="width: 25; height: 25;">
+              <button class="video-card__favorite">
                 <svg class="video-card__favorite-icon" width="25" viewBox="0 0 20 20" role="img" aria-label="Favorite videos">
                   <use class="star-o" xlink:href="/images/sprite.svg#star-black" />
                   <use class="star" xlink:href="/images/sprite.svg#star-orange" />
@@ -115,7 +81,7 @@
                   <p class="video-card__duration">31 мин 25 сек</p>
                 </div>
               </a>
-              <button class="video-card__favorite video-card__favorite--active" style="width: 25; height: 25;">
+              <button class="video-card__favorite video-card__favorite--active" >
                 <svg class="video-card__favorite-icon" width="25" viewBox="0 0 20 20" role="img" aria-label="Favorite videos">
                   <use class="star-o" xlink:href="/images/sprite.svg#star-black" />
                   <use class="star" xlink:href="/images/sprite.svg#star-orange" />
@@ -133,7 +99,7 @@
                   <p class="video-card__duration">31 мин 25 сек</p>
                 </div>
               </a>
-              <button class="video-card__favorite" style="width: 25; height: 25;">
+              <button class="video-card__favorite" >
                 <svg class="video-card__favorite-icon" width="25" viewBox="0 0 20 20" role="img" aria-label="Favorite videos">
                   <use class="star-o" xlink:href="/images/sprite.svg#star-black" />
                   <use class="star" xlink:href="/images/sprite.svg#star-orange" />

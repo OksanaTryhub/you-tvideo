@@ -31,11 +31,18 @@ body {
   line-height: 1.2;
   color: #292D32;
   background-color: #FFF6EB;
+  display: flex;
+  flex-direction: column;
+}
+
+main{
+  flex-grow: 1;
 }
 
 img,
 svg {
   display: block;
+  height: auto;
 }
 
 button {
@@ -320,19 +327,26 @@ input::-webkit-search-cancel-button{
 .video-list {
   width: 100%;
   @media screen and (min-width: 768px) {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    display: flex;
+    flex-wrap: wrap;
     gap: 32px 12px;
-  }
-  @media screen and (min-width: 1024px) {
-    grid-template-columns: repeat(3, 1fr);
   }
   @media screen and (min-width: 1440px) {
     gap: 40px 12px;
   }
 }
 
-.video-card {
+.video-list__item{
+  max-width: 100%;
+  @media screen and (min-width: 768px) {
+      max-width: calc((100% - 12px) / 2);
+    }
+    @media screen and (min-width: 1024px) {
+      max-width: calc((100% - 24px) / 3);
+    }
+}
+
+.video-card {   
   position: relative;
   padding-bottom: 20px;
   @media screen and (min-width: 768px) {
@@ -343,7 +357,7 @@ input::-webkit-search-cancel-button{
 
 .video-card__cover {
   border-radius: 16px;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
   width: 100%;
 }
 
@@ -351,6 +365,10 @@ input::-webkit-search-cancel-button{
   font-size: 18px;
   line-height: 1.2;
   margin-bottom: 6px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden; 
   @media screen and (min-width: 768px) {
     font-size: 20px;
     margin-bottom: 10px;
@@ -358,6 +376,10 @@ input::-webkit-search-cancel-button{
   @media screen and (min-width: 1440px) {
     font-size: 24px;
   }
+}
+
+.video-card__title:hover {
+  -webkit-line-clamp: initial;
 }
 
 .video-card__channel {
@@ -376,6 +398,8 @@ input::-webkit-search-cancel-button{
 }
 
 .video-card__favorite {
+  width: 20px;
+  height: 20px;
   position: absolute;
   right: 12px;
   top: 12px;
@@ -386,7 +410,7 @@ input::-webkit-search-cancel-button{
   display: none;
 }
 
-.video-card__favorite--active .star{
+.video-card__favorite.active .star{
   display: block;
 }
 
@@ -488,39 +512,40 @@ input::-webkit-search-cancel-button{
   padding-top: 12px; 
   letter-spacing: 0.02em;
   stroke: #292D32;
+  display: flex;
+  min-width: 210px;
+  width: max-content;
+    white-space: nowrap;
+    align-items: center;
+    gap: 4px;
   @media screen and (min-width: 1024px) {
+    justify-content: right;
     margin-bottom: 0;
   }
   &:hover {
       color: #FF6A00;
       stroke: #FF6A00;
     }
+} 
+
+.video__favorite-btn .star {
+  display: none;
 }
 
-.video__favorite,
-.video__no-favorite {
-  display: flex;
-  width: max-content;
-  white-space: nowrap;
-  align-items: center;
-  gap: 4px;
+.video__favorite-btn .star-o {
+  display: block;
+}
+.video__favorite-btn.active .star-o {
+  display: none;
 }
 
-.video__no-favorite-icon, .video__favorite-icon{
+.video__favorite-btn.active .star {
+  display: block;
+}
+
+.video__favorite-icon {
   width: 20px;
-  height: 20px;  
-}
-
-.video__favorite{
-  display: none;
-}
-
-.video__favorite--active .video__favorite{
-  display: flex;
-}
-  
-.video__favorite--active .video__no-favorite{
-  display: none;
+  height: 20px;
 }
 
   .video__details--title {
@@ -566,6 +591,10 @@ input::-webkit-search-cancel-button{
 .video__details--description {
   letter-spacing: 0.02em;
   line-height: 1.2;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 5;
+  overflow: hidden;
   @media screen and (min-width: 768px) {
     font-size: 20px;
   }
@@ -573,4 +602,8 @@ input::-webkit-search-cancel-button{
   @media screen and (min-width: 1440px) {
     font-size: 24px;
   }
+}
+
+.video__details--description:hover {
+  -webkit-line-clamp: initial
 }
