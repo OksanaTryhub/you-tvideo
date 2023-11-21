@@ -5,6 +5,9 @@ const VIDEOS_URL = 'https://www.googleapis.com/youtube/v3/videos';
 const SEARCH_URL = 'https://www.googleapis.com/youtube/v3/search';
 
 const videoList = document.querySelector('.video-list');
+const searchForm = document.querySelector('.search__form');
+const searchPageTitle = document.querySelector('.video-gallery__title');
+
 const favoriteVideoIds = JSON.parse(localStorage.getItem('favoriteYT') || "[]");
 
 const fetchTrendingVideos = async () => {
@@ -14,6 +17,7 @@ const fetchTrendingVideos = async () => {
     url.searchParams.append('chart', 'mostPopular');
     url.searchParams.append('regionCode', 'UA');
     url.searchParams.append('maxResults', '12');
+    url.searchParams.append('pageInfo', '2');
     url.searchParams.append('key', API_KEY);
 
     const response = await fetch(url);
@@ -76,12 +80,31 @@ const fetchVideo = async (id) => {
   }
 }
 
+const fetchVideosByKeyword = async (query) => {
+  try {
+    const url = new URL(SEARCH_URL);
+    url.searchParams.append('part', 'snippet');
+    url.searchParams.append('q', query);
+    url.searchParams.append('maxResults', '12');
+    url.searchParams.append('pageInfo', '');
+    url.searchParams.append('key', API_KEY);
+
+    const response = await fetch(url);
+
+    if (!response) {
+      throw new Error(`HTTP error ${response.status}`);
+    }
+    return await response.json();
+    
+  } catch (error) {
+    console.error('error: ', error);
+  }
+}
+
 const renderListVideos = (videos) => {
   videoList.textContent = "";
 
   const videoGallery = videos.items.map(video => {
-    
-  const formattedDuration = convertTime(video.contentDetails.duration);
   
   const li = document.createElement('li');
   li.classList.add('video-list__item');
@@ -96,7 +119,11 @@ const renderListVideos = (videos) => {
         <div>
           <h3 class="video-card__title">${video.snippet.title}</h3>
           <p class="video-card__channel">${video.snippet.channelTitle}</p>
-          <p class="video-card__duration">${formattedDuration}</p>
+          ${
+            video.contentDetails
+              ? `<p class="video-card__duration">${convertTime(video.contentDetails.duration)}</p>`
+              : ""
+          }          
         </div>
       </a>
       <button 
@@ -117,13 +144,53 @@ const renderListVideos = (videos) => {
   videoList.append(...videoGallery);
 }
 
-const renderVideo = ({items: [video]}) => {
+// const renderSearchedVideos = (videos) => {
+//   console.log('videos.items[0].id.videoId: ', videos.items[0].id.videoId); 
+
+//   videoList.textContent = ""; 
+
+//   const videoGallery = videos.items.map(video => {
+  
+//   const li = document.createElement('li');
+//   li.classList.add('video-list__item');
+
+//   li.innerHTML = `
+//     <article class="video-card">
+//       <a href="/video.html?id=${video.id.videoId || video.id}" class="video-card__link">
+//         <img class="video-card__cover"  src="${
+//             video.snippet.thumbnails.standart?.url ||
+//             video.snippet.thumbnails.high?.url
+//             }" alt="${video.snippet.title} cover"/>
+//         <div>
+//           <h3 class="video-card__title">${video.snippet.title}</h3>
+//           <p class="video-card__channel">${video.snippet.channelTitle}</p>
+//         </div>
+//       </a>
+//       <button 
+//         class="video-card__favorite favorite ${favoriteVideoIds.includes(video.id.videoId || video.id) ? 'active' : ''}" 
+//         type="button" 
+//         aria-label="Добавить в избранное ${video.snippet.title}"
+//         data-video-id="${video.id.videoId || video.id}">
+//         <svg class="video-card__favorite-icon" viewBox="0 0 20 20" role="img" aria-label="Favorite videos">
+//           <use class="star-o" xlink:href="/images/sprite.svg#star-black" />
+//           <use class="star" xlink:href="/images/sprite.svg#star-orange" />
+//         </svg>
+//       </button>
+//     </article>
+//   `;    
+//     return li;
+//   })
+
+//   videoList.append(...videoGallery);
+// }
+
+const renderVideo = ({items: [video]}) => { 
   const videoElem = document.querySelector('.video');
 
   videoElem.innerHTML = `
     <div class="container">
       <div class="video__player">
-        <iframe class="video__iframe" src="https://www.youtube.com/embed/${video.id}"
+        <iframe class="video__iframe" src="https://www.youtube.com/embed/${video.id|| video.id.videoId}"
           title="YouTube video player" frameborder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowfullscreen></iframe>
@@ -133,7 +200,7 @@ const renderVideo = ({items: [video]}) => {
           class="video__favorite-btn favorite ${favoriteVideoIds.includes(video.id) ? 'active' : ''}" 
           type="button"
           aria-label="Добавить в избранное ${video.snippet.title}" 
-          data-video-id="${video.id}" 
+          data-video-id="${video.id.videoId || video.id}" 
         >
         <span>
           <p class="star">В избранном</p>
@@ -157,25 +224,48 @@ const renderVideo = ({items: [video]}) => {
       </div>
     </div>
   `
-
 }
 
-const init = () => {
-  const currentPage = location.pathname.split('/').pop();
-  const urlSearchParams = new URLSearchParams(location.search);
-  // console.log('urlSearchParams: ', urlSearchParams);
-  const videoId = urlSearchParams.get('id');
+searchForm.addEventListener('submit', async (event) => {
+  event.preventDefault();
 
+  const searchInput = document.querySelector('.search__form--input');
+  const keyword = searchInput.value.trim();
+
+  if (keyword !== '') {
+    try {
+      window.location.href = `/search.html?q=${keyword}`;
+      
+    } catch (error) {
+      console.error('Error searching videos: ', error);
+    }
+  } else {
+    // swal({
+    //   icon: 'warning',
+    //   title: 'Please enter a search keyword',
+    //   timer: 2500
+    // });
+    swal("Please enter a search keyword", {
+      dangerMode: true,
+    });
+  }
+});
+
+const init = () => {
+  const currentPage = location.pathname;
+  const urlSearchParams = new URLSearchParams(location.search);
+  const videoId = urlSearchParams.get('id');
   const searchQuery = urlSearchParams.get('q');
   
-  if (currentPage === 'index.html' || currentPage === '') {
+  if (currentPage === '/' || currentPage === '') {
     fetchTrendingVideos().then(renderListVideos);
-  } else if (currentPage === 'video.html' && videoId) {
+  } else if (currentPage === '/video.html' && videoId) {
     fetchVideo(videoId).then(renderVideo);
-  } else if (currentPage === 'favorite.html') {
+  } else if (currentPage === '/favorite.html') {
     fetchFavoriteVideos().then(renderListVideos);
-  } else if (currentPage === 'search.html' && searchQuery) {
-    console.log('currentPage: ', currentPage);
+  } else if (currentPage === '/search.html' && searchQuery) {
+    searchPageTitle.textContent = `Search results for "${searchQuery}"`;
+    fetchVideosByKeyword(searchQuery).then(renderListVideos);
   }
 
   document.body.addEventListener('click', ({ target }) => {
