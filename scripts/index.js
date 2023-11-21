@@ -57,11 +57,7 @@ const fetchFavoriteVideos = async () => {
 }
 
 const fetchVideo = async (id) => {
-  try {
-    if (favoriteVideoIds.length === 0) {
-      return { items: [] }
-    };
-
+  try {  
     const url = new URL(VIDEOS_URL);
     url.searchParams.append('part', 'contentDetails, id, snippet, statistics');
     url.searchParams.append('maxResults', '12');
@@ -102,16 +98,26 @@ const fetchVideosByKeyword = async (query) => {
 }
 
 const renderListVideos = (videos) => {
+  console.log('videos: ', videos);
   videoList.textContent = "";
 
   const videoGallery = videos.items.map(video => {
+
+    let id;
+
+if (typeof video.id === 'string') {
+  id = video.id;
+} else {
+  id = video.id.videoId;
+}
   
   const li = document.createElement('li');
   li.classList.add('video-list__item');
+  
 
   li.innerHTML = `
     <article class="video-card">
-      <a href="/video.html?id=${video.id}" class="video-card__link">
+      <a href="/video.html?id=${id}" class="video-card__link">
         <img class="video-card__cover"  src="${
             video.snippet.thumbnails.standart?.url ||
             video.snippet.thumbnails.high?.url
@@ -130,7 +136,7 @@ const renderListVideos = (videos) => {
         class="video-card__favorite favorite ${favoriteVideoIds.includes(video.id) ? 'active' : ''}" 
         type="button" 
         aria-label="Добавить в избранное ${video.snippet.title}"
-        data-video-id="${video.id}">
+        data-video-id="${id}">
         <svg class="video-card__favorite-icon" viewBox="0 0 20 20" role="img" aria-label="Favorite videos">
           <use class="star-o" xlink:href="/images/sprite.svg#star-black" />
           <use class="star" xlink:href="/images/sprite.svg#star-orange" />
@@ -144,63 +150,30 @@ const renderListVideos = (videos) => {
   videoList.append(...videoGallery);
 }
 
-// const renderSearchedVideos = (videos) => {
-//   console.log('videos.items[0].id.videoId: ', videos.items[0].id.videoId); 
-
-//   videoList.textContent = ""; 
-
-//   const videoGallery = videos.items.map(video => {
-  
-//   const li = document.createElement('li');
-//   li.classList.add('video-list__item');
-
-//   li.innerHTML = `
-//     <article class="video-card">
-//       <a href="/video.html?id=${video.id.videoId || video.id}" class="video-card__link">
-//         <img class="video-card__cover"  src="${
-//             video.snippet.thumbnails.standart?.url ||
-//             video.snippet.thumbnails.high?.url
-//             }" alt="${video.snippet.title} cover"/>
-//         <div>
-//           <h3 class="video-card__title">${video.snippet.title}</h3>
-//           <p class="video-card__channel">${video.snippet.channelTitle}</p>
-//         </div>
-//       </a>
-//       <button 
-//         class="video-card__favorite favorite ${favoriteVideoIds.includes(video.id.videoId || video.id) ? 'active' : ''}" 
-//         type="button" 
-//         aria-label="Добавить в избранное ${video.snippet.title}"
-//         data-video-id="${video.id.videoId || video.id}">
-//         <svg class="video-card__favorite-icon" viewBox="0 0 20 20" role="img" aria-label="Favorite videos">
-//           <use class="star-o" xlink:href="/images/sprite.svg#star-black" />
-//           <use class="star" xlink:href="/images/sprite.svg#star-orange" />
-//         </svg>
-//       </button>
-//     </article>
-//   `;    
-//     return li;
-//   })
-
-//   videoList.append(...videoGallery);
-// }
-
 const renderVideo = ({items: [video]}) => { 
   const videoElem = document.querySelector('.video');
+
+  let id;
+  if (typeof video.id === 'string') {
+    id = video.id;
+  } else {
+    id = video.id.videoId;
+    }
 
   videoElem.innerHTML = `
     <div class="container">
       <div class="video__player">
-        <iframe class="video__iframe" src="https://www.youtube.com/embed/${video.id|| video.id.videoId}"
+        <iframe class="video__iframe" src="https://www.youtube.com/embed/${id}"
           title="YouTube video player" frameborder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowfullscreen></iframe>
       </div>
       <div class="video__content">
         <button
-          class="video__favorite-btn favorite ${favoriteVideoIds.includes(video.id) ? 'active' : ''}" 
+          class="video__favorite-btn favorite ${favoriteVideoIds.includes(id) ? 'active' : ''}" 
           type="button"
           aria-label="Добавить в избранное ${video.snippet.title}" 
-          data-video-id="${video.id.videoId || video.id}" 
+          data-video-id="${id}" 
         >
         <span>
           <p class="star">В избранном</p>
@@ -270,9 +243,11 @@ const init = () => {
 
   document.body.addEventListener('click', ({ target }) => {
     const itemFavorite = target.closest(".favorite");
+    console.log("itemFavorite", itemFavorite)
 
     if (itemFavorite) {
       const videoId = itemFavorite.dataset.videoId;
+      console.log('videoId =>: ', videoId);
 
       if (favoriteVideoIds.includes(videoId)) {
         favoriteVideoIds.splice(favoriteVideoIds.indexOf(videoId), 1);
