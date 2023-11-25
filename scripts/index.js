@@ -7,6 +7,7 @@ const SEARCH_URL = 'https://www.googleapis.com/youtube/v3/search';
 const videoList = document.querySelector('.video-list');
 const searchForm = document.querySelector('.search__form');
 const searchPageTitle = document.querySelector('.video-gallery__title');
+const searchVideoGallery = document.querySelector('.video-gallery');
 
 const favoriteVideoIds = JSON.parse(localStorage.getItem('favoriteYT') || "[]");
 
@@ -60,7 +61,6 @@ const fetchVideo = async (id) => {
   try {  
     const url = new URL(VIDEOS_URL);
     url.searchParams.append('part', 'contentDetails, id, snippet, statistics');
-    url.searchParams.append('maxResults', '12');
     url.searchParams.append('id', id);
     url.searchParams.append('key', API_KEY);
 
@@ -76,60 +76,69 @@ const fetchVideo = async (id) => {
   }
 }
 
-const fetchVideosByKeyword = async (query) => {
+const fetchVideosByKeyword = async (query, excludedId) => {
   try {
     const url = new URL(SEARCH_URL);
     url.searchParams.append('part', 'snippet');
     url.searchParams.append('q', query);
+    url.searchParams.append('type', "video");
     url.searchParams.append('maxResults', '12');
     url.searchParams.append('pageInfo', '');
     url.searchParams.append('key', API_KEY);
-
+    
     const response = await fetch(url);
 
     if (!response) {
       throw new Error(`HTTP error ${response.status}`);
     }
-    return await response.json();
+    const data = await response.json();
+
+    if (excludedId) {
+      data.items = data.items.filter(item => item.id.videoId !== excludedId);
+    }
+
+    return data;
     
   } catch (error) {
     console.error('error: ', error);
+    throw error;
   }
 }
 
 const renderListVideos = (videos) => {
-  console.log('videos: ', videos);
   videoList.textContent = "";
 
-  const videoGallery = videos.items.map(video => {
+  let renderedVideos;
+  if (videos.items) {
+    renderedVideos = videos.items
+  } else {
+    renderedVideos = videos
+  }
 
+  const videoGallery = renderedVideos.map(video => {
     let id;
-
-if (typeof video.id === 'string') {
-  id = video.id;
-} else {
-  id = video.id.videoId;
-}
+    if (typeof video.id === 'string') {
+      id = video.id;
+    } else {
+      id = video.id.videoId;
+    }
   
-  const li = document.createElement('li');
-  li.classList.add('video-list__item');
-  
+    const li = document.createElement('li');
+    li.classList.add('video-list__item');
 
-  li.innerHTML = `
+    li.innerHTML = `
     <article class="video-card">
       <a href="/video.html?id=${id}" class="video-card__link">
-        <img class="video-card__cover"  src="${
-            video.snippet.thumbnails.standart?.url ||
-            video.snippet.thumbnails.high?.url
-            }" alt="${video.snippet.title} cover"/>
+        <img class="video-card__cover"  src="${video.snippet.thumbnails.standart?.url ||
+      video.snippet.thumbnails.high?.url
+      }" alt="${video.snippet.title} cover"/>
         <div>
           <h3 class="video-card__title">${video.snippet.title}</h3>
           <p class="video-card__channel">${video.snippet.channelTitle}</p>
-          ${
-            video.contentDetails
-              ? `<p class="video-card__duration">${convertTime(video.contentDetails.duration)}</p>`
-              : ""
-          }          
+          ${video.contentDetails
+        ? `<p class="video-card__duration">${convertTime(video.contentDetails.duration)}</p>`
+        : ""
+      }          
         </div>
       </a>
       <button 
@@ -143,14 +152,14 @@ if (typeof video.id === 'string') {
         </svg>
       </button>
     </article>
-  `;    
+  `;
     return li;
   })
 
   videoList.append(...videoGallery);
-}
+};
 
-const renderVideo = ({items: [video]}) => { 
+const renderVideo = async ({items: [video]}) => { 
   const videoElem = document.querySelector('.video');
 
   let id;
@@ -197,27 +206,37 @@ const renderVideo = ({items: [video]}) => {
       </div>
     </div>
   `
+
+  const relatedVideoSearchQuery = video.snippet.title;
+  const mainVideoId = id;
+  try{
+    const relatedVideos = await fetchVideosByKeyword(relatedVideoSearchQuery, mainVideoId);
+  // let filteredVideos = relatedVideos.items.filter(video => video.id.videoId !== mainVideoId);
+
+    if (!relatedVideos.items || relatedVideos.items.length === 0) {
+      searchVideoGallery.append('Oops... There are no similar videos... Try again...')
+    }
+
+    renderListVideos(relatedVideos);
+    } catch (error) {
+    console.error('Error fetching and rendering related videos: ', error);
+    }
 }
 
 searchForm.addEventListener('submit', async (event) => {
   event.preventDefault();
 
-  const searchInput = document.querySelector('.search__form--input');
-  const keyword = searchInput.value.trim();
+  // const searchInput = document.querySelector('.search__form--input');
+  // const keyword = searchInput.value.trim();
+  const keyword = searchForm.search.value.trim();
 
   if (keyword !== '') {
     try {
-      window.location.href = `/search.html?q=${keyword}`;
-      
+      window.location.href = `/search.html?q=${keyword}`;  
     } catch (error) {
       console.error('Error searching videos: ', error);
     }
   } else {
-    // swal({
-    //   icon: 'warning',
-    //   title: 'Please enter a search keyword',
-    //   timer: 2500
-    // });
     swal("Please enter a search keyword", {
       dangerMode: true,
     });
@@ -229,11 +248,13 @@ const init = () => {
   const urlSearchParams = new URLSearchParams(location.search);
   const videoId = urlSearchParams.get('id');
   const searchQuery = urlSearchParams.get('q');
+
   
   if (currentPage === '/' || currentPage === '') {
     fetchTrendingVideos().then(renderListVideos);
   } else if (currentPage === '/video.html' && videoId) {
     fetchVideo(videoId).then(renderVideo);
+    fetchVideosByKeyword(searchQuery).then(renderListVideos);
   } else if (currentPage === '/favorite.html') {
     fetchFavoriteVideos().then(renderListVideos);
   } else if (currentPage === '/search.html' && searchQuery) {
@@ -243,16 +264,17 @@ const init = () => {
 
   document.body.addEventListener('click', ({ target }) => {
     const itemFavorite = target.closest(".favorite");
-    console.log("itemFavorite", itemFavorite)
 
     if (itemFavorite) {
       const videoId = itemFavorite.dataset.videoId;
-      console.log('videoId =>: ', videoId);
 
       if (favoriteVideoIds.includes(videoId)) {
         favoriteVideoIds.splice(favoriteVideoIds.indexOf(videoId), 1);
         localStorage.setItem("favoriteYT", JSON.stringify(favoriteVideoIds));
         itemFavorite.classList.remove('active');
+        if (currentPage === '/favorite.html') {
+          fetchFavoriteVideos().then(renderListVideos);
+        }
         
       } else {
         favoriteVideoIds.push(videoId);
