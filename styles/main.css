@@ -209,8 +209,9 @@ input::-webkit-search-cancel-button{
 .header__favorite--link {
   display: flex;
   justify-content: center;
+  align-items: center;
   gap: 4px;
-  stroke: #292D32;
+  stroke: var(--text-color);
   letter-spacing: 0.02em;
     &:hover {
     color: #FF6A00;
@@ -255,6 +256,7 @@ input::-webkit-search-cancel-button{
   border: none;
   outline: none;
   letter-spacing: 0.02em;
+  color: var(--text-color);
 }
 
 .search__form--btn {
@@ -600,7 +602,7 @@ input::-webkit-search-cancel-button{
   margin-bottom: 24px;
   padding-top: 12px; 
   letter-spacing: 0.02em;
-  stroke: #292D32;
+  stroke: var(--text-color);
   display: flex;
   min-width: 210px;
   width: max-content;
