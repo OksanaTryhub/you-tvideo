@@ -25,12 +25,23 @@
                 <use xlink:href="/images/sprite.svg#logo-white" />
               </svg>
             </a>
-            <a class="hero__favorite--link" href="/favorite.html">
-              <span class="hero__favorite--tag">Избранное</span>
-              <svg class="hero__favorite--icon" viewBox="0 0 20 20" role="img" aria-label="Favorite videos">
-                <use xlink:href="/images/sprite.svg#star-white" />
-              </svg>
-            </a>
+            <div class="hero__links--wrap"> 
+              <a class="hero__favorite--link" href="/favorite.html">
+                <span class="hero__favorite--tag">Избранное</span>
+                <svg class="hero__favorite--icon" viewBox="0 0 20 20" role="img" aria-label="Favorite videos">
+                  <use xlink:href="/images/sprite.svg#star-white" />
+                </svg>
+              </a>
+              
+              <button class="dark-mode-btn" type="button" aria-label="Light/dark theme toggle">
+                <svg class="dark-mode-btn__icon">
+                  <use xlink:href="/images/sprite.svg#sun" />
+                </svg>
+                <svg class="dark-mode-btn__icon">
+                  <use xlink:href="/images/sprite.svg#moon" />
+                </svg>
+              </button>
+            </div>
           </div>
           <h1 class="hero__title">Смотри. Загружай. Создавай</h1>
           <p class="hero__tagline">Удобный видеохостинг для тебя</p>
@@ -58,6 +69,9 @@
         <h2 class="video-gallery__title">В тренде</h2>
         <ul class="video-list">
         </ul>
+        <div class="pagination visually-hidden" style="background-color: rebeccapurple;">
+          Pagination
+        </div>
       </div>
     </section>
   </main>
@@ -72,7 +86,7 @@
       <div class="footer__developers">
         <ul class="footer__developers-list">
           <li class="footer__developers-item">
-            Designer: Anastasia Ilina 
+            Design: Oksana Tryhub, Anastasia Ilina
           </li>
           <li class="footer__developers-item">
             Developer: <a href="https://github.com/OksanaTryhub" target="_blank" rel="noopener noreferrer nofollow">Oksana Tryhub</a>

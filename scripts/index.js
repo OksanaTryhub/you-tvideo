@@ -1,6 +1,9 @@
 import { convertTime, formatDate } from "./helpers.js";
 
-const API_KEY = 'AIzaSyA4KZ-pF3I2sBJmGjw6pj1QfOYmBo-i8aw';
+//ksanat
+// const API_KEY = 'AIzaSyA4KZ-pF3I2sBJmGjw6pj1QfOYmBo-i8aw';
+//tendresse
+const API_KEY = 'AIzaSyADu18hLO2SOTOFYyr4PlAIum6f8-eXV_k';
 const VIDEOS_URL = 'https://www.googleapis.com/youtube/v3/videos';
 const SEARCH_URL = 'https://www.googleapis.com/youtube/v3/search';
 
@@ -8,9 +11,57 @@ const videoList = document.querySelector('.video-list');
 const searchForm = document.querySelector('.search__form');
 const searchPageTitle = document.querySelector('.video-gallery__title');
 const searchVideoGallery = document.querySelector('.video-gallery');
+const darkModeBtn = document.querySelector('.dark-mode-btn');
 
 const favoriteVideoIds = JSON.parse(localStorage.getItem('favoriteYT') || "[]");
 
+// Dark mode control 
+// Проверка темной темы в системных настройках
+if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+  darkModeBtn.classList.add('dark-mode-btn__active');
+  document.body.classList.add('dark');
+} 
+
+// Проверка темной темы в localstorage
+ if (localStorage.getItem('darkMode') === 'dark') {
+  darkModeBtn.classList.add('dark-mode-btn__active');
+  document.body.classList.add('dark');
+ } else if (localStorage.getItem('darkMode') === 'light') {
+  darkModeBtn.classList.remove('dark-mode-btn__active');
+  document.body.classList.remove('dark');
+}
+
+// Если меняются системные настройки, меняем тему
+window
+  .matchMedia("(prefers-color-scheme: dark)")
+  .addEventListener('change', (e) => {
+    const newColorScheme = e.matches ? 'dark' : 'light';
+
+    if (newColorScheme === 'dark') {
+      darkModeBtn.classList.add('dark-mode-btn__active');
+      document.body.classList.add('dark');
+      localStorage.setItem('darkMode', 'dark');
+    } else {
+      darkModeBtn.classList.remove('dark-mode-btn__active');
+      document.body.classList.remove('dark');
+      localStorage.setItem('darkMode', 'light');
+    }
+  })
+
+
+
+darkModeBtn.onclick = () => {
+  darkModeBtn.classList.toggle('dark-mode-btn__active');
+  const isDark = document.body.classList.toggle('dark');
+
+  if (isDark) {
+    localStorage.setItem('darkMode', 'dark');
+  } else {
+    localStorage.setItem('darkMode', 'light');
+  }
+}
+
+// Receiving data from API
 const fetchTrendingVideos = async () => {
   try {
     const url = new URL(VIDEOS_URL);
@@ -105,6 +156,7 @@ const fetchVideosByKeyword = async (query, excludedId) => {
   }
 }
 
+// Rendering functions
 const renderListVideos = (videos) => {
   videoList.textContent = "";
 
@@ -184,7 +236,7 @@ const renderVideo = async ({items: [video]}) => {
           aria-label="Добавить в избранное ${video.snippet.title}" 
           data-video-id="${id}" 
         >
-        <span>
+        <span class="video__content--text">
           <p class="star">В избранном</p>
           <p class="star-o">Добавить в избранное</p>
         </span>
@@ -223,6 +275,7 @@ const renderVideo = async ({items: [video]}) => {
     }
 }
 
+
 searchForm.addEventListener('submit', async (event) => {
   event.preventDefault();
 
@@ -249,7 +302,6 @@ const init = () => {
   const videoId = urlSearchParams.get('id');
   const searchQuery = urlSearchParams.get('q');
 
-  
   if (currentPage === '/' || currentPage === '') {
     fetchTrendingVideos().then(renderListVideos);
   } else if (currentPage === '/video.html' && videoId) {

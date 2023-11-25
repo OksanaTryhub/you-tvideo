@@ -10,6 +10,38 @@
   src: url("../fonts/Inter-Black.ttf");
 }
 
+:root {
+  --white: #ffffff;
+  --light: #FFF6EB;
+  --accent: #FF6A00;
+  --hover-color: #FB6231;
+  --dark-accent: #59080B;
+  --black: #292D32;
+
+  /* Light mode */
+  --page-bg: var(--light);
+  --text-color: var(--black);
+  --secondary-text-color: var(--white);
+  --white-to-accent: var(--white);
+  --accent-to-dark: var(--accent);
+
+  --hero-bg: var(--accent) url('../images/bg.jpg') center/cover;
+  --footer-bg: var(--accent) url('../images/bg-footer.jpg') center/cover;
+  --dark-mode-btn-bg: var(--accent);
+}
+
+.dark {  
+  --page-bg: #221d1d;
+  --text-color: var(--light);
+  --secondary-text-color: var(--light);
+  --white-to-accent: var(--accent);
+  --accent-to-dark: var(--dark-accent);
+
+  --hero-bg: var(--dark-accent) url('../images/bg-dark.jpg') center/cover;
+  --footer-bg: var(--dark-accent) url('../images/bg-footer-dark.jpg') center/cover;
+  --dark-mode-btn-bg: transparent;
+}
+
 *,
 *::before,
 *::after {
@@ -29,8 +61,8 @@ body {
   -webkit-tap-highlight-color: transparent;
   font-size: 16px;
   line-height: 1.2;
-  color: #292D32;
-  background-color: #FFF6EB;
+  color: var(--text-color); 
+  background-color: var(--page-bg);
   display: flex;
   flex-direction: column;
 }
@@ -103,17 +135,68 @@ input::-webkit-search-cancel-button{
     }
 }
 
+.dark-mode-btn {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  min-width: 43px;
+  height: 22px;
+  padding: 3px;
+  border-radius: 50px;
+  /* background-color : --dark-mode-btn-bg; */
+  background-color: var(--dark-mode-btn-bg);
+  outline: 1px solid var(--white-to-accent);
+}
+
+.dark-mode-btn::before {
+  content: "";
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  display: block;
+  width: 20px;
+  height: 20px; 
+  border-radius: 50%;
+  background-color: var(--white-to-accent);
+   transition: left 0.3s ease-in;
+}
+
+.dark-mode-btn__active::before {
+  left: 22px;  
+}
+
+.dark-mode-btn__icon {
+  position: relative;
+  width: 16px;
+  height: 16px;
+  fill:var(--accent-to-dark);
+} 
+
 .header {
   padding: 18px 0 30px;
   @media screen and (min-width: 768px) {
-      padding: 32px 0 24px;
-    }
+    padding: 32px 0 24px;
+  }
 }
 
 .header__container{
   display: flex;
   align-items: center;
+  gap: 10px;
+  @media screen and (min-width: 768px) {
+      gap: 40px;
+    }
+  @media screen and (min-width: 1440px) {
+      gap: 80px;
+    }
+  
+}
+
+.header__links{
+  display: flex;
+  align-items: center;
   justify-content: space-between;
+  width: 100%;
 }
 
 .header__logo--icon {
@@ -136,12 +219,10 @@ input::-webkit-search-cancel-button{
 }
 
 .header__favorite--tag{
-  transform: scale(0);
-  /* display: none; */
+  display: none;
   @media screen and (min-width: 1024px) {
-      /* display: block; */
-      transform: scale(1);
-    }
+    display: block;
+  }
 }
 
 .header__favorite--icon {
@@ -164,7 +245,7 @@ input::-webkit-search-cancel-button{
   align-items: center;
   justify-content: space-between;
   border-radius: 40px;
-  border: 1px solid #FB9953;
+  border: 1px solid var(--accent-to-dark);
   padding-left: 24px;
 }
 
@@ -182,9 +263,9 @@ input::-webkit-search-cancel-button{
   padding: 8px 16px;
   gap: 4px;
   border-radius: 40px;
-  background: #FF6A00;
+  background: var(--accent-to-dark);
   letter-spacing: 0.02em;
-  color: #ffffff;
+  color: var(--secondary-text-color);
 }
 
 
@@ -194,7 +275,7 @@ input::-webkit-search-cancel-button{
 }
 
 .hero {
-  background: #FF6A00 url('../images/bg.jpg') center/cover;
+  background: var(--hero-bg);
   padding: 16px 0 32px;
   margin-bottom: 20px;
   @media screen and (min-width: 768px) {
@@ -215,7 +296,7 @@ input::-webkit-search-cancel-button{
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  color: #ffffff;
+  color: var(--secondary-text-color);
 }
 
 .hero__logo {
@@ -243,29 +324,35 @@ input::-webkit-search-cancel-button{
   }
 }
 
+.hero__links--wrap {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+    @media screen and (min-width: 768px) {
+      position: absolute;
+      right: 0;
+      top: -18px;
+      gap: 40px;
+    }
+  
+    @media screen and (min-width: 1440px) {
+      top: -36px;
+      gap: 80px;
+    }
+}
+
 .hero__favorite--link {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 4px;
   letter-spacing: 0.02em;
-  
-  @media screen and (min-width: 768px) {
-      position: absolute;
-      right: 0;
-      top: -18px;
-    }
-  @media screen and (min-width: 1440px) {
-      top: -36px;
-    }
 }
 
 .hero__favorite--tag{
-  transform: scale(0);
-  /* display: none; */
+  display: none;
   @media screen and (min-width: 1024px) {
-    transform: scale(1);
-      /* display: block; */
+      display: block;
   }
 }
 
@@ -420,8 +507,8 @@ input::-webkit-search-cancel-button{
 
 .footer {
   padding: 24px 0 32px;
-  background: #FF6A00 url('../images/bg-footer.jpg') center/cover;
-  color: #ffffff;
+  background: var(--footer-bg);
+  color: var(--text-color);
   @media screen and (min-width: 768px) {
       padding: 27px 0;
     }
@@ -451,7 +538,7 @@ input::-webkit-search-cancel-button{
 }
 
 .footer__developers {
-  color: #ffffff;
+  color: var(--secondary-text-color);
   letter-spacing: 0.02em;
 }
 
@@ -497,16 +584,19 @@ input::-webkit-search-cancel-button{
 }
 
 .video__content{
+  
 @media screen and (min-width: 1024px) {
     display: flex;
     flex-direction: row-reverse;
     align-items: start;
     justify-content: space-between;
     gap: 84px;
+    
   }
 }
 
 .video__favorite-btn { 
+  color: var(--text-color);
   margin-bottom: 24px;
   padding-top: 12px; 
   letter-spacing: 0.02em;
@@ -607,14 +697,23 @@ input::-webkit-search-cancel-button{
   -webkit-line-clamp: initial
 }
 
+.swal-modal{
+  background-color: var(--light);
+}
+
 .swal-button {
   border-radius: 40px;
-  background: #FF6A00;
+  background: var(--accent);
   letter-spacing: 0.02em;
-  color: #ffffff;
+  color: var(--secondary-text-color);
+text-transform: lowercase;
   padding: 7px 19px;
   font-size: 16px;
   font-weight: normal;
   outline: none;
   border: none;
+}
+
+.swal-button--danger:not([disabled]):hover {
+  background-color: var(--hover-color);
 }
